@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ISUFST CICI Campus Directory & Acquaintance Party</title>
+    <!-- Tailwind CSS for modern responsive utility classes -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        maroon: {
+                            800: '#831843',
+                            900: '#700c2e',
+                            950: '#4c0519',
+                        },
+                        rose: {
+                            500: '#ec4899',
+                            600: '#db2777',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #4c0519;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #db2777;
+            border-radius: 4px;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #fff1f2 0%, #ffe4e6 50%, #fff5f5 100%);
+            color: #4c0519;
+            min-height: 100vh;
+        }
+        .sidebar-btn {
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .sidebar-btn:hover {
+            transform: translateX(4px);
+            background: linear-gradient(90deg, rgba(236, 72, 153, 0.25), rgba(244, 114, 182, 0.15));
+        }
+        .sidebar-btn.active {
+            background: linear-gradient(90deg, #db2777, #ec4899);
+            box-shadow: 0 8px 20px rgba(219, 39, 119, 0.35);
+            color: white;
+        }
+        .content-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .content-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 35px rgba(131, 24, 67, 0.15);
+        }
+    </style>
+</head>
+
+<body class="flex flex-col md:flex-row min-h-screen">
+
+    <aside id="sidebar" class="w-full md:w-72 bg-gradient-to-b from-maroon-950 via-maroon-900 to-maroon-800 text-white p-5 flex flex-col justify-between shadow-2xl z-50 md:fixed md:h-screen overflow-y-auto">
+        <div>
+            <!-- Brand header -->
+            <a href="#top" onclick="switchTab('overview')" class="flex items-center gap-3 pb-6 border-b border-rose-500/20 mb-6 group">
+                <div class="w-12 h-12 rounded-full bg-rose-500/20 border-2 border-rose-400 flex items-center justify-center font-bold text-xl overflow-hidden shadow-inner flex-shrink-0">
+                    <img src="logo.png" alt="ISUFST Logo">
+                </div>
+                <div>
+                    <h1 class="text-xs font-bold leading-tight uppercase tracking-wider text-rose-200">ISUFST San Enrique</h1>
+                    <span class="text-[10px] text-rose-300/80 font-medium">CICI Campus Directory</span>
+                </div>
+            </a>
+
+            <!-- Navigation Sections -->
+            <div class="text-[10px] uppercase tracking-widest text-rose-300/70 font-bold mb-2 px-3">Directory</div>
+            <nav class="space-y-1 mb-6">
+                <button onclick="switchTab('university')" id="btn-university" class="sidebar-btn w-full flex items-center gap-3 px-3.5 py-3 rounded-2xl text-sm font-semibold text-rose-100 text-left">
+                    <span class="text-base">🏛️</span> University Admin
+                </button>
+                <button onclick="switchTab('campus')" id="btn-campus" class="sidebar-btn w-full flex items-center gap-3 px-3.5 py-3 rounded-2xl text-sm font-semibold text-rose-100 text-left">
+                    <span class="text-base">🏫</span> Campus Admin
+                </button>
+                <button onclick="switchTab('deans')" id="btn-deans" class="sidebar-btn w-full flex items-center gap-3 px-3.5 py-3 rounded-2xl text-sm font-semibold text-rose-100 text-left">
+                    <span class="text-base">🎓</span> Deans
+                </button>
+                <button onclick="switchTab('faculty')" id="btn-faculty" class="sidebar-btn w-full flex items-center gap-3 px-3.5 py-3 rounded-2xl text-sm font-semibold text-rose-100 text-left">
+                    <span class="text-base">👥</span> CICI Faculty & Staff
+                </button>
+            </nav>
+
+            <div class="text-[10px] uppercase tracking-widest text-rose-300/70 font-bold mb-2 px-3">Acquaintance Party</div>
+            <nav id="nav-party" class="space-y-1">
+                <button onclick="switchTab('activities')" id="btn-activities" class="sidebar-btn active w-full flex items-center gap-3 px-3.5 py-3 rounded-2xl text-sm font-semibold text-rose-100 text-left">
+                    <span class="text-base">🎉</span> Activities Overview
+                </button>
+                <button onclick="switchTab('street-dance')" id="btn-street-dance" class="sidebar-btn w-full flex items-center gap-3 px-3.5 py-3 rounded-2xl text-sm font-semibold text-rose-100 text-left">
+                    <span class="text-base">💃</span> Street Dance
+                </button>
+                <button onclick="switchTab('final-performance')" id="btn-final-performance" class="sidebar-btn w-full flex items-center gap-3 px-3.5 py-3 rounded-2xl text-sm font-semibold text-rose-100 text-left">
+                    <span class="text-base">🎭</span> Final Performance
+                </button>
+                <button onclick="switchTab('laro-ng-lahi')" id="btn-laro-ng-lahi" class="sidebar-btn w-full flex items-center gap-3 px-3.5 py-3 rounded-2xl text-sm font-semibold text-rose-100 text-left">
+                    <span class="text-base">🏆</span> Laro ng Lahi
+                </button>
+                <button onclick="switchTab('lgbtqia')" id="btn-lgbtqia" class="sidebar-btn w-full flex items-center gap-3 px-3.5 py-3 rounded-2xl text-sm font-semibold text-rose-100 text-left">
+                    <span class="text-base">🌈</span> LGBTQIA+ Activities
+                </button>
+                <button onclick="switchTab('pageant')" id="btn-pageant" class="sidebar-btn w-full flex items-center gap-3 px-3.5 py-3 rounded-2xl text-sm font-semibold text-rose-100 text-left">
+                    <span class="text-base">👑</span> Mr. & Ms. Acquaintance
+                </button>
+            </nav>
+        </div>
+
+        <!-- Sidebar Highlight Card -->
+        <div class="mt-8 p-4 bg-white/10 backdrop-blur-md rounded-2xl border border-rose-400/20 shadow-lg">
+            <div class="flex items-center gap-2 mb-1">
+                <span class="text-lg">🎊</span>
+                <strong class="text-xs text-rose-200 font-bold">CICI Acquaintance 2026</strong>
+            </div>
+            <p class="text-[11px] text-rose-300/90 leading-relaxed">Rehearsals, competitions, performances, and student activities.</p>
+        </div>
+    </aside>
+
+    <main class="flex-1 md:ml-72 flex flex-col min-h-screen bg-gradient-to-br from-rose-50/80 via-pink-50/50 to-rose-100/40">
+        
+        <!-- Top bar -->
+        <header class="sticky top-0 z-40 bg-white/80 backdrop-blur-md border-b border-rose-900/10 px-6 py-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+            <div>
+                <h2 id="topbar-title" class="text-base font-bold text-maroon-950">Acquaintance Party Activities & Schedule</h2>
+                <p class="text-xs text-rose-800">ISUFST San Enrique Campus • College of Information & Computing Innovation</p>
+            </div>
+            <div class="flex items-center gap-3">
+                <span class="text-xs font-bold text-rose-700 bg-rose-100 px-3 py-1.5 rounded-full shadow-sm flex items-center gap-1.5">
+                    <span class="w-2 h-2 rounded-full bg-rose-600 animate-pulse"></span> September 16-18, 2026
+                </span>
+            </div>
+        </header>
+
+        <!-- Dynamic Content Container -->
+        <div id="content-container" class="flex-1 p-6 md:p-10 max-w-7xl mx-auto w-full">
+            <!-- Content gets dynamically rendered via JavaScript -->
+        </div>
+
+        <!-- Footer -->
+        <footer class="bg-maroon-950 text-white text-center py-6 px-4 mt-auto border-t-4 border-rose-500">
+            <p class="text-xs text-rose-200">&copy; 2026 <span class="font-semibold text-white">Iloilo State University of Fisheries Science and Technology</span> - CICI Campus Directory & Acquaintance Party</p>
+        </footer>
+    </main>
+
+    <script>
+        const pageData = {
+            'overview': {
+                title: 'Acquaintance Party Activities Overview',
+                subtitle: 'Explore all scheduled events, competitions, and documentation folders.',
+                badge: 'Festival Highlights',
+                cards: [
+                    {
+                        icon: '🎉',
+                        title: 'Rehearsals & Preparation',
+                        date: 'September 16, 2026',
+                        desc: 'House CICI students in the IT Building for rehearsals, blocking, costume preparation, and coordination.',
+                        drive: 'https://drive.google.com/drive/folders/1bnMCMoIreotE2a6Wl9NwD4Ww9zH8Ifhy',
+                        tag: 'Preparation'
+                    },
+                    {
+                        icon: '💃',
+                        title: 'Street Dance Competition',
+                        date: 'September 17, 2026',
+                        desc: 'High-energy Street Dance performances showcasing CICI participants rhythm and teamwork.',
+                        drive: 'https://drive.google.com/drive/folders/1kpQ1fXrSHRuMTCD9TopQaDEPkHFmXc-v',
+                        tag: 'Competition'
+                    },
+                    {
+                        icon: '🎭',
+                        title: 'Final Performance',
+                        date: 'September 17, 2026',
+                        desc: 'Culminating group performance demonstrating creativity, talent, and departmental unity.',
+                        drive: 'https://drive.google.com/drive/folders/1r7WAfCUUHcWhoOaWiFvidsfgmZ-Tm7vj?usp=sharing',
+                        tag: 'Main Event'
+                    },
+                    {
+                        icon: '🏆',
+                        title: 'Laro ng Lahi',
+                        date: 'September 17, 2026',
+                        desc: 'Traditional Filipino games played by faculty, staff, and students, fostering camaraderie and school spirit.',
+                        drive: 'https://drive.google.com/drive/folders/1NSY4BSnRjioRbbm3NGXKx6uHmrT2kahl',
+                        tag: 'Sports & Games'
+                    },
+                    {
+                        icon: '🌈',
+                        title: 'LGBTQIA+ Activities',
+                        date: 'September 18, 2026',
+                        desc: 'Inclusive events celebrating diversity, equality, and pride across the campus.',
+                        drive: 'https://drive.google.com/drive/folders/1SAWRLzCqNK7Z9sa5kOfDF21bXkFRMiK6?usp=sharing',
+                        tag: 'Inclusivity'
+                    },
+                    {
+                        icon: '👑',
+                        title: 'Mr. & Ms. Acquaintance',
+                        date: 'September 18, 2026',
+                        desc: 'Pageant showcase celebrating the poise, intelligence, and charm of the CICI candidates.',
+                        drive: 'https://drive.google.com/drive/folders/1TJYIQoKbs9m7NSdgoVmat0sXapP2d5Br?usp=sharing',
+                        tag: 'Pageant'
+                    }
+                ]
+            },
+            'activities': {
+                title: 'Acquaintance Party Activities & Schedule',
+                subtitle: 'Overview of all CICI department activities, rehearsals, and celebrations.',
+                badge: 'Master Schedule',
+                cards: [
+                    {
+                        icon: '🎉',
+                        title: 'Rehearsals & Preparation',
+                        date: 'September 16, 2026',
+                        desc: 'House CICI students in the IT Building for rehearsals, blocking, costume preparation, and coordination.',
+                        drive: 'https://drive.google.com/drive/folders/1bnMCMoIreotE2a6Wl9NwD4Ww9zH8Ifhy',
+                        tag: 'IT Building'
+                    },
+                    {
+                        icon: '💃',
+                        title: 'Street Dance Competition',
+                        date: 'September 17, 2026',
+                        desc: 'CICI participants prepare and perform for the Street Dance competition.',
+                        drive: 'https://drive.google.com/drive/folders/12uKJ6Avn1VYOUaYPMo1uClDQ-tprPGOp?usp=sharing',
+                        tag: 'Campus Grounds'
+                    },
+                    {
+                        icon: '🎭',
+                        title: 'Final Performance Competition',
+                        date: 'September 17, 2026',
+                        desc: 'Group performances showcasing creativity, teamwork, preparation, and campus spirit.',
+                        drive: 'https://drive.google.com/drive/folders/1r7WAfCUUHcWhoOaWiFvidsfgmZ-Tm7vj?usp=sharing',
+                        tag: 'Auditorium'
+                    },
+                    {
+                        icon: '🏆',
+                        title: 'Laro ng Lahi',
+                        date: 'September 17, 2026',
+                        desc: 'Traditional Filipino games encouraging camaraderie, fun, and sportsmanship among faculty, staff, and students.',
+                        drive: 'https://drive.google.com/drive/folders/1jCmZe2XV5uvShLHm5xE2NWlRe4JknBDw?usp=sharing',
+                        tag: 'Sports Field'
+                    },
+                    {
+                        icon: '🌈',
+                        title: 'LGBTQIA+ Activities',
+                        date: 'September 18, 2026',
+                        desc: 'Activities featuring LGBTQIA+ participants as part of the Acquaintance Party program.',
+                        drive: 'https://drive.google.com/drive/folders/1ygeY7cGTijNX60AplAEZeS0CIoVPNZph',
+                        tag: 'Special Program'
+                    },
+                    {
+                        icon: '👑',
+                        title: 'Mr. & Ms. Acquaintance',
+                        date: 'September 18, 2026',
+                        desc: 'Pageant-related activities and participation of CICI candidates during the celebration.',
+                        drive: 'https://drive.google.com/drive/folders/1QcWbUM8IUaAM3Vw1OnMIN8UDaS79qxyv',
+                        tag: 'Main Stage'
+                    }
+                ]
+            },
+            'street-dance': {
+                title: 'Street Dance Competition',
+                subtitle: 'Rhythm, synchronized choreography, and vibrant energy by CICI dancers.',
+                badge: 'September 17, 2026',
+                cards: [
+                    {
+                        icon: '💃',
+                        title: 'CICI Dance Troupe Performance',
+                        date: 'September 17, 2026',
+                        desc: 'High-energy choreography prepared by CICI students for the annual campus street dance showdown.',
+                        drive: 'https://drive.google.com/drive/folders/1kpQ1fXrSHRuMTCD9TopQaDEPkHFmXc-v',
+                        tag: 'Competition'
+                    },
+                    
+                ]
+            },
+            'final-performance': {
+                title: 'Final Performance Competition',
+                subtitle: 'The grand showcase of artistic talent, musicality, and theatrical mastery.',
+                badge: 'September 17, 2026',
+                cards: [
+                    {
+                        icon: '🎭',
+                        title: 'CICI Culminating Musical & Drama',
+                        date: 'September 17, 2026',
+                        desc: 'Theatrical and musical presentations staged by CICI students highlighting computing themes and campus pride.',
+                        drive: 'https://drive.google.com/drive/folders/1r7WAfCUUHcWhoOaWiFvidsfgmZ-Tm7vj?usp=sharing',
+                        tag: 'Main Stage'
+                    },
+                    {
+                        icon: '🤝',
+                        title: 'Production Design & Teamwork',
+                        date: 'September 16, 2026',
+                        desc: 'Prop building, lighting coordination, and stage blocking managed by student leaders.',
+                        drive: 'https://drive.google.com/drive/folders/1W6WNKU5bpEuNO7iSne-D7w9SOpYlGXhv?usp=sharing',
+                        tag: 'Production'
+                    }
+                ]
+            },
+            'laro-ng-lahi': {
+                title: 'Laro ng Lahi',
+                subtitle: 'Reviving traditional Filipino outdoor games with faculty, staff, and students.',
+                badge: 'September 17, 2026',
+                cards: [
+                    {
+                        icon: '🏆',
+                        title: 'Palo-Sebo, Patintero & Tug of War',
+                        date: 'September 17, 2026',
+                        desc: 'Exciting friendly matches uniting CICI faculty members, staff, and tech students in classic Filipino sports.',
+                        drive: 'https://drive.google.com/drive/folders/1NSY4BSnRjioRbbm3NGXKx6uHmrT2kahl',
+                        tag: 'Sports Fest'
+                    }
+                ]
+            },
+            'lgbtqia': {
+                title: 'LGBTQIA+ Activities & Pride Showcase',
+                subtitle: 'Celebrating equality, inclusion, self-expression, and community diversity.',
+                badge: 'September 18, 2026',
+                cards: [
+                    {
+                        icon: '🌈',
+                        title: 'Inclusion & Diversity Showcase',
+                        date: 'September 18, 2026',
+                        desc: 'Special segments highlighting LGBTQIA+ student talents, advocacy, fashion, and artistic expression.',
+                        drive: 'https://drive.google.com/drive/folders/1ygeY7cGTijNX60AplAEZeS0CIoVPNZph',
+                        tag: 'Special Event'
+                    }
+                ]
+            },
+            'pageant': {
+                title: 'Mr. & Ms. Acquaintance Pageant',
+                subtitle: 'Poise, intelligence, charm, and CICI pride on the grand stage.',
+                badge: 'September 18, 2026',
+                cards: [
+                    {
+                        icon: '👑',
+                        title: 'CICI Pageant Candidates Showcase',
+                        date: 'September 18, 2026',
+                        desc: 'Official presentation, casual wear, formal attire, and Q&A segments featuring our CICI representatives.',
+                        drive: 'https://drive.google.com/drive/folders/1QcWbUM8IUaAM3Vw1OnMIN8UDaS79qxyv',
+                        tag: 'Pageant'
+                    }
+                ]
+            },
+            'university': {
+                title: 'University Level Leadership',
+                subtitle: 'Top executive administration of ISUFST system.',
+                badge: 'Executive Office',
+                cards: [
+                    {
+                        img: 'pres.png',
+                        title: 'Dr. Nordy D. Siason, Jr., CESO VI',
+                        role: 'University President',
+                        dept: 'Office of the President',
+                        tag: 'President'
+                    }
+                ]
+            },
+            'campus': {
+                title: 'Campus Level Administration',
+                subtitle: 'San Enrique Campus administrative officers and leadership.',
+                badge: 'San Enrique Campus',
+                cards: [
+                    {
+                        img: 'campusAd.png',
+                        title: 'Dr. Michael B. Dizon',
+                        role: 'Campus Administrator',
+                        dept: 'Office of Campus Administration',
+                        tag: 'Administrator'
+                    },
+                    {
+                        img: 'Admin.png',
+                        title: 'Mrs. Melby Parreño',
+                        role: 'Administrative Officer',
+                        dept: 'Administrative Services Office',
+                        tag: 'Admin Officer'
+                    }
+                ]
+            },
+            'deans': {
+                title: 'Deans of Academic Units',
+                subtitle: 'College leadership across ISUFST San Enrique campus.',
+                badge: 'Academic Deans',
+                cards: [
+                    {
+                        img: 'ccs.png',
+                        title: 'Dr. Wenda D. Panes',
+                        role: 'Dean, CICI',
+                        dept: 'College of Information & Computing Innovation',
+                        tag: 'CICI Dean'
+                    },
+                    {
+                        img: 'cbmsd.png',
+                        title: 'Dr. Janice H. Ching',
+                        role: 'Dean, CBMSD',
+                        dept: 'College of Business, Management & Sustainable Dev.',
+                        tag: 'CBMSD Dean'
+                    },
+                    {
+                        img: 'coag.png',
+                        title: 'Dr. Noli L. Gerona',
+                        role: 'Dean, COA',
+                        dept: 'College of Agriculture',
+                        tag: 'COA Dean'
+                    },
+                    {
+                        img: 'coed.png',
+                        title: 'Dr. Rene T. Estomo',
+                        role: 'Dean, COED',
+                        dept: 'College of Education',
+                        tag: 'COED Dean'
+                    }
+                ]
+            },
+            'faculty': {
+                title: 'College of Informatics and Computing Innovations (CICI)',
+                subtitle: 'Faculty members and administrative staff.',
+                badge: 'CICI Department',
+                cards: [
+                    { img: 'dave.png', title: 'Prof. Allan Dave Tagacay', role: 'CICI Faculty', dept: 'Department of Computing', tag: 'Faculty' },
+                    { img: 'weena.png', title: 'Dr. Weena Bulnes', role: 'CICI Faculty', dept: 'Department of Computing', tag: 'Faculty' },
+                    { img: 'Dacudao.png', title: 'Dr. Dythne Dacudao', role: 'CICI Faculty', dept: 'Department of Computing', tag: 'Faculty' },
+                    { img: 'ivan.png', title: 'Prof. Ivan Selvestre', role: 'CICI Faculty', dept: 'Department of Computing', tag: 'Faculty' },
+                    { img: 'andrea.png', title: 'Ms. Andrea Delos Santos', role: 'CICI Staff', dept: 'CICI Administrative Staff', tag: 'Staff' },
+                    { img: 'mike.png', title: 'Mr. Michael Borcillo', role: 'CICI Staff', dept: 'CICI Technical Support', tag: 'Staff' }
+                ]
+            }
+        };
+
+        function switchTab(tabKey) {
+            document.querySelectorAll('#sidebar nav button').forEach(btn => {
+                btn.classList.remove('active');
+                btn.classList.add('text-rose-100');
+            });
+
+            const btnMap = {
+                'university': 'btn-university',
+                'campus': 'btn-campus',
+                'deans': 'btn-deans',
+                'faculty': 'btn-faculty',
+                'activities': 'btn-activities',
+                'street-dance': 'btn-street-dance',
+                'final-performance': 'btn-final-performance',
+                'laro-ng-lahi': 'btn-laro-ng-lahi',
+                'lgbtqia': 'btn-lgbtqia',
+                'pageant': 'btn-pageant'
+            };
+
+            if (btnMap[tabKey]) {
+                const targetBtn = document.getElementById(btnMap[tabKey]);
+                if (targetBtn) {
+                    targetBtn.classList.add('active');
+                    targetBtn.classList.remove('text-rose-100');
+                }
+            }
+
+            const data = pageData[tabKey] || pageData['overview'];
+            document.getElementById('topbar-title').textContent = data.title;
+
+            const container = document.getElementById('content-container');
+            
+            let html = `
+                <div class="mb-8">
+                    <span class="inline-block bg-rose-200 text-maroon-950 font-bold text-xs px-3 py-1 rounded-full mb-2 uppercase tracking-wide shadow-sm">${data.badge}</span>
+                    <h3 class="text-2xl md:text-3xl font-extrabold text-maroon-950 tracking-tight">${data.title}</h3>
+                    <p class="text-sm text-rose-800/90 mt-1">${data.subtitle}</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            `;
+
+            data.cards.forEach(card => {
+                if (card.img) {
+                    html += `
+                        <div class="content-card bg-white rounded-2xl p-6 border border-rose-900/10 shadow-lg flex flex-col justify-between">
+                            <div class="flex items-center gap-4 mb-4">
+                                <div class="w-16 h-16 rounded-2xl bg-rose-100 border-2 border-rose-300 overflow-hidden shadow-md flex-shrink-0">
+                                    <img src="${card.img}" alt="${card.title}" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/100x100/831843/fff?text=User'">
+                                </div>
+                                <div>
+                                    <span class="inline-block bg-pink-100 text-rose-700 font-semibold text-[10px] px-2.5 py-0.5 rounded-full mb-1">${card.tag}</span>
+                                    <h4 class="font-bold text-maroon-950 text-base leading-snug">${card.title}</h4>
+                                </div>
+                            </div>
+                            <div class="border-t border-rose-100 pt-3 mt-auto">
+                                <p class="text-xs font-semibold text-rose-700">${card.role}</p>
+                                <p class="text-xs text-rose-900/70 mt-0.5">${card.dept}</p>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    html += `
+                        <div class="content-card bg-white rounded-2xl p-6 border border-rose-900/10 shadow-lg flex flex-col justify-between">
+                            <div>
+                                <div class="flex justify-between items-start mb-3">
+                                    <span class="text-3xl p-3 bg-rose-50 rounded-2xl shadow-sm border border-rose-100">${card.icon}</span>
+                                    <span class="bg-rose-100 text-rose-800 font-bold text-[10px] px-3 py-1 rounded-full uppercase tracking-wider">${card.tag}</span>
+                                </div>
+                                <h4 class="font-extrabold text-maroon-950 text-lg mb-1">${card.title}</h4>
+                                <p class="text-xs font-bold text-rose-600 mb-3 flex items-center gap-1.5">
+                                    <span>📅</span> ${card.date}
+                                </p>
+                                <p class="text-xs text-rose-900/80 leading-relaxed mb-6">${card.desc}</p>
+                            </div>
+                            <div>
+                                <a href="${card.drive}" target="_blank" class="w-full inline-flex items-center justify-center gap-2 bg-gradient-to-r from-maroon-900 to-maroon-800 hover:from-rose-600 hover:to-pink-600 text-white text-xs font-bold py-3 px-4 rounded-xl shadow-md transition-all duration-300">
+                                    <span>📁</span> View Drive Documentation
+                                </a>
+                            </div>
+                        </div>
+                    `;
+                }
+            });
+
+            html += `</div>`;
+            container.innerHTML = html;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            switchTab('activities');
+        });
+    </script>
+</body>
+
+</html>
